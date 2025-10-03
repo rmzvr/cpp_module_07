@@ -7,17 +7,19 @@ template< typename T >
 class Array
 {
 	private:
-		size_t	_length = 0;
-		T *		_elements = nullptr;
+		size_t	_length{ 0 };
+		T *		_elements{ nullptr };
 	public:
 		Array();
 		Array( unsigned int n );
 		Array( Array<T> const & other );
-		Array<T> & operator=( Array<T> const & other );
 		~Array();
+		
+		Array<T> &		operator=( Array<T> const & other );
+		T &				operator[]( size_t idx );
+		T const &		operator[]( size_t idx ) const;
 
-		T &			operator[]( size_t idx );
-		T const &	operator[]( size_t idx ) const;
+		size_t			size() const;
 };
 
 template <typename T>
@@ -36,7 +38,8 @@ inline Array<T>::Array( unsigned int n )
 }
 
 template <typename T>
-inline Array<T>::Array( Array<T> const &other ) : _length(other._length), _elements(new T[this->_length]())
+inline Array<T>::Array( Array<T> const &other )
+	: _length(other._length), _elements(new T[this->_length]())
 {
 	std::cout << "Copy constructor called" << std::endl;
 	for (size_t i = 0; i < this->_length; ++i)
@@ -95,6 +98,12 @@ inline T const & Array<T>::operator[]( size_t idx ) const
 		return this->_elements[idx];
 	}
 	throw std::exception();
+}
+
+template <typename T>
+inline size_t Array<T>::size() const
+{
+	return this->_length;
 }
 
 #endif
